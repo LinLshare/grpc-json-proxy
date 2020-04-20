@@ -17,7 +17,7 @@ spec:
     - name: http
       protocol: TCP
       port: 7001
-      targetPort: 6565
+      targetPort: 7001
   selector:
     app: grpc-json-proxy
   type: NodePort
