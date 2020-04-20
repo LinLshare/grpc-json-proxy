@@ -85,13 +85,13 @@ spec:
         name: http
         protocol: HTTP
       hosts:
-        - "grpc-json-proxy.osaas-api-dev.tec-do.com"
+        - "grpc-json-proxy.test.com"
     - port:
         number: 443
         name: https
         protocol: HTTP
       hosts:
-        - "grpc-json-proxy.osaas-api-dev.tec-do.com"
+        - "grpc-json-proxy.test.com"
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
@@ -112,7 +112,7 @@ metadata:
   namespace: osaas
 spec:
   hosts:
-    - "grpc-json-proxy.osaas-api-dev.tec-do.com"
+    - "grpc-json-proxy.test.com"
   gateways:
     - grpc-json-proxy-gateway
   http:
