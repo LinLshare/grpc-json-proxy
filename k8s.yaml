@@ -70,3 +70,55 @@ spec:
     rollingUpdate:
       maxUnavailable: 25%
       maxSurge: 25%
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: grpc-json-proxy-gateway
+  namespace: tool
+spec:
+  selector:
+    istio: ingressgateway # use Istio default gateway implementation
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - "grpc-json-proxy.osaas-api-dev.tec-do.com"
+    - port:
+        number: 443
+        name: https
+        protocol: HTTP
+      hosts:
+        - "grpc-json-proxy.osaas-api-dev.tec-do.com"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: grpc-json-proxy
+  namespace: osaas
+spec:
+  host: grpc-json-proxy
+  subsets:
+    - name: stable
+      labels:
+        version: stable
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: grpc-json-proxy
+  namespace: osaas
+spec:
+  hosts:
+    - "grpc-json-proxy.osaas-api-dev.tec-do.com"
+  gateways:
+    - grpc-json-proxy-gateway
+  http:
+    - route:
+        - destination:
+            port:
+              number: 7001
+            host: grpc-json-proxy
+            subset: stable
